@@ -1,10 +1,16 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 import icon1 from './assets/icon1.png'
 import { FaCheckCircle, FaCheckSquare, FaClipboardList, FaEdit, FaPen, FaRegCheckCircle, FaRegCircle, FaRegEdit, FaRegSquare, FaTrash, FaUserEdit } from 'react-icons/fa'
 import { CheckSquare, Sparkles, Square, TrendingUp } from "lucide-react";
+import addSound from './assets/soundEffects/add.mp3'
+import deleteSound from './assets/soundEffects/delete.mp3'
+import completeSound from './assets/soundEffects/complete.mp3'
+import updateSound from './assets/soundEffects/update.mp3'
+import {ToastContainer, toast} from 'react-toastify'
+
 
 function App() {
 
@@ -18,6 +24,10 @@ function App() {
   const [deletingIndex, setDeletingIndex] = useState(null)
   const [editIndex, setEditIndex] = useState(null)
   const [editValue, setEditValue] = useState("")
+  const addMusic = useRef(new Audio(addSound))
+  const deleteMusic = useRef(new Audio(deleteSound))
+  const completeMusic = useRef(new Audio(completeSound))
+  const updateMusic = useRef(new Audio(updateSound))
 
   useEffect(() => {
     localStorage.setItem("todos", JSON.stringify(todoList))
@@ -36,6 +46,8 @@ function App() {
   }
 
   const handleToogleTodoStatus = (index) => {
+    completeMusic.current.currentTime = 0
+    completeMusic.current.play()
     setTodoList(prev =>
       prev.map((todo, i) =>
         i === index ? { ...todo, done: !todo.done } : todo)
@@ -43,6 +55,9 @@ function App() {
   }
 
   const handleAddTodo = () => {
+    addMusic.current.currentTime = 0
+    addMusic.current.play()
+    toast.success("Task added successfully.")
     const updatedTodoList = [...todoList, todo]
     setTodoList(updatedTodoList)
     setTodo({
@@ -64,6 +79,9 @@ function App() {
   }
 
   const handleUpdateButton = () => {
+    updateMusic.current.currentTime = 0
+    updateMusic.current.play()
+    toast("Task updated")
     setTodoList(prev =>
       prev.map((todo, i) =>
         i === editIndex ? { ...todo, title: editValue } : todo)
@@ -74,6 +92,10 @@ function App() {
 
 
   const handleDeleteTodo = (index) => {
+    toast.error("Task deleted from list.")
+    deleteMusic.current.currentTime = 0
+    deleteMusic.current.play()
+    
     setDeletingIndex(index)
 
     setTimeout(() => {
@@ -84,6 +106,7 @@ function App() {
 
   return (
     <div className='w-full min-h-screen bg-linear-to-br from-indigo-950 via-purple-950 to-pink-950 flex justify-center'>
+      <ToastContainer/>
       <div className='mt-6'>
         <div className="w-200 h-30 flex flex-col items-center justify-between mb-4 bg-purple-700 rounded-2xl p-3 border border-purple-900">
           {/* Icon + Text */}
@@ -163,7 +186,7 @@ function App() {
             value={todo.title}
             onChange={handleTodoBox}
           />
-          <button className="flex items-center gap-2 h-10 px-5 bg-gradient-to-tl from-purple-600 to-pink-600 rounded-xl text-white font-bold hover:cursor-pointer
+          <button className="flex items-center gap-2 h-10 px-5 bg-linear-to-tl from-purple-600 to-pink-600 rounded-xl text-white font-bold hover:cursor-pointer
           hover:from-purple-700 hover:to-pink-700 hover:scale-105 transform transition-all duration-200"
             onClick={handleAddTodo}
           >
