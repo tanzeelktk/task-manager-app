@@ -9,7 +9,7 @@ import addSound from './assets/soundEffects/add.mp3'
 import deleteSound from './assets/soundEffects/delete.mp3'
 import completeSound from './assets/soundEffects/complete.mp3'
 import updateSound from './assets/soundEffects/update.mp3'
-import {ToastContainer, toast} from 'react-toastify'
+import { ToastContainer, toast } from 'react-toastify'
 
 
 function App() {
@@ -95,7 +95,7 @@ function App() {
     toast.error("Task deleted from list.")
     deleteMusic.current.currentTime = 0
     deleteMusic.current.play()
-    
+
     setDeletingIndex(index)
 
     setTimeout(() => {
@@ -106,7 +106,7 @@ function App() {
 
   return (
     <div className='w-full min-h-screen bg-linear-to-br from-indigo-950 via-purple-950 to-pink-950 flex justify-center'>
-      <ToastContainer/>
+      <ToastContainer />
       <div className='mt-6'>
         <div className="w-200 h-30 flex flex-col items-center justify-between mb-4 bg-purple-700 rounded-2xl p-3 border border-purple-900">
           {/* Icon + Text */}
@@ -140,10 +140,17 @@ function App() {
                 <p className='text-white text-sm font-semibold'>Progress</p>
                 <p className='text-white text-sm font-semibold transition-all duration-500'>{progress}%</p>
               </div>
-              <div className='w-full h-2 bg-white mt-2 rounded-xl'>
-                <div className=' h-2 bg-lime-400 rounded-xl transition-all duration-800'
+              <div className='w-full h-2 bg-white mt-2 rounded-xl overflow-hidden relative'>
+
+                <div className=' h-2 bg-lime-400 rounded-xl transition-all duration-800 relative'
                   style={{ width: `${progress}%` }}
-                ></div>
+                >
+                  {100 > progress > 0 && (
+                    <div className="absolute top-0 left-0 h-full w-20 bg-gradient-to-r from-transparent via-white/60 to-transparent animate-slide"></div>
+                  )}
+
+                </div>
+
               </div>
             </div>
           )}
@@ -200,41 +207,41 @@ function App() {
         {todoList.length > 0 ? (
           <div className='flex flex-col gap-2'>
             {todoList.map((todoValue, index) => {
-              return ( 
-                editIndex === index ? 
-                   <div className='w-full h-10 bg-purple-700 rounded-xl px-4 py-3 flex gap-4 justify-between items-center hover:scale-105  
+              return (
+                editIndex === index ?
+                  <div className='w-full h-10 bg-purple-700 rounded-xl px-4 py-3 flex gap-4 justify-between items-center hover:scale-105  
                    transition-all duration-500'>
-                    <input value={editValue} 
-                    onChange={handleUpdateBoxChange}
-                    className='w-170 h-8 bg-purple-300 border-none rounded-lg p-3 outline-none'
+                    <input value={editValue}
+                      onChange={handleUpdateBoxChange}
+                      className='w-170 h-8 bg-purple-300 border-none rounded-lg p-3 outline-none'
                     />
                     <button onClick={handleUpdateButton}
-                    className='px-4 bg-blue-600 text-white text-sm font-semibold py-1 rounded-lg hover:bg-blue-800 hover:cursor-pointer transition-all duration-500'
+                      className='px-4 bg-blue-600 text-white text-sm font-semibold py-1 rounded-lg hover:bg-blue-800 hover:cursor-pointer transition-all duration-500'
                     >Update</button>
-                   </div>
-                 :  
-                <div className={`w-full h-10 bg-purple-700 rounded-xl px-4 py-3 flex justify-between items-center hover:scale-105  transition-all duration-500
+                  </div>
+                  :
+                  <div className={`w-full h-10 bg-purple-700 rounded-xl px-4 py-3 flex justify-between items-center hover:scale-105  transition-all duration-500
                         ${deletingIndex === index ? "opacity-0 scale-90" : "opacity-100"}
                         ${animateAdd ? "scale-105" : "scale-100"}`}
-                  key={index}>
-                  <div className='flex gap-2 items-center'>
-                    <div onClick={() => handleToogleTodoStatus(index)} >
-                      {todoValue.done ? <CheckSquare className='text-white transition-all duration-500 hover:cursor-pointer' size={20} />
-                        :
-                        <Square className='text-white transition-all duration-500 hover:cursor-pointer' size={20} />}
-                    </div>
-                    <p className='text-white text-xl font-normal'>{todoValue.title}</p></div>
-                  <div className='flex gap-1'>
-                    <div className='w-7 h-7 bg-purple-500 text-blue-600 flex items-center justify-center rounded-sm transition-all duration-500 
+                    key={index}>
+                    <div className='flex gap-2 items-center'>
+                      <div onClick={() => handleToogleTodoStatus(index)} >
+                        {todoValue.done ? <CheckSquare className='text-white transition-all duration-500 hover:cursor-pointer' size={20} />
+                          :
+                          <Square className='text-white transition-all duration-500 hover:cursor-pointer' size={20} />}
+                      </div>
+                      <p className='text-white text-xl font-normal'>{todoValue.title}</p></div>
+                    <div className='flex gap-1'>
+                      <div className='w-7 h-7 bg-purple-500 text-blue-600 flex items-center justify-center rounded-sm transition-all duration-500 
                     hover:cursor-pointer hover:text-blue-800'
-                    onClick={()=>handleEdit(index, todoValue.title)}
-                    ><FaPen /></div>
-                    <div className='w-7 h-7 bg-purple-500 text-pink-600 flex items-center justify-center rounded-sm transition-all duration-500 
+                        onClick={() => handleEdit(index, todoValue.title)}
+                      ><FaPen /></div>
+                      <div className='w-7 h-7 bg-purple-500 text-pink-600 flex items-center justify-center rounded-sm transition-all duration-500 
                     hover:cursor-pointer hover:text-pink-800'
-                      onClick={() => handleDeleteTodo(index)}
-                    ><FaTrash /></div>
+                        onClick={() => handleDeleteTodo(index)}
+                      ><FaTrash /></div>
+                    </div>
                   </div>
-                </div>
               )
             })}
           </div>
